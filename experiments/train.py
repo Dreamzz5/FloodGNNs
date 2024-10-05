@@ -24,8 +24,6 @@ def parse_args():
         "-c", "--cfg", default="baselines/STID/gcn_seq.py", help="training config"
     )
     parser.add_argument("-ct", "--conv_type", default="GCN", type=str)
-    parser.add_argument("-e", "--expand", action="store_true", help="evaluation only")
-    parser.add_argument("-a", "--adaptive", action="store_true", help="evaluation only")
     parser.add_argument("-d", "--dense", action="store_true", help="evaluation only")
     parser.add_argument("-i", "--identity", action="store_true", help="evaluation only")
     parser.add_argument("-g", "--gpus", default="1", type=str)
@@ -36,10 +34,8 @@ def parse_args():
 def modify_config_file(
     config_file: str,
     conv_type: str,
-    expand: bool,
     identity: bool,
     dense: bool,
-    adaptive: bool,
 ):
     """
     Modifies the configuration file to update the 'conv_type', 'expand', and 'identity' parameters.
@@ -52,14 +48,10 @@ def modify_config_file(
         for line in lines:
             if "conv_type =" in line:
                 file.write(f"conv_type = '{conv_type}'\n")
-            elif "expand =" in line:
-                file.write(f"expand = {str(expand).capitalize()}\n")
             elif "identity =" in line:
                 file.write(f"identity = {str(identity).capitalize()}\n")
             elif "dense =" in line:
                 file.write(f"dense = {str(dense).capitalize()}\n")
-            elif "adaptive =" in line:
-                file.write(f"adaptive = {str(adaptive).capitalize()}\n")
             else:
                 file.write(line)
 
@@ -68,7 +60,7 @@ if __name__ == "__main__":
     args = parse_args()
     os.environ["CUDA_VISIBLE_DEVICES"] = str(args.gpus)
     modify_config_file(
-        args.cfg, args.conv_type, args.expand, args.identity, args.dense, args.adaptive
+        args.cfg, args.conv_type, args.identity, args.dense
     )
     cfg = import_config(args.cfg)
     basicts.launch_training(cfg, args.gpus, node_rank=0)

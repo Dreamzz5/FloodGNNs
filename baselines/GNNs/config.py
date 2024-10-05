@@ -11,7 +11,7 @@ from basicts.runners import SimpleTimeSeriesForecastingRunner
 from basicts.scaler import ZScoreScaler
 from basicts.utils import get_regular_settings, load_adj
 import numpy as np
-from .arch import FloodGNN
+from .arch import GCN_Point
 import random
 
 ############################## Hot Parameters ##############################
@@ -29,7 +29,7 @@ NORM_EACH_CHANNEL = regular_settings[
 RESCALE = regular_settings["RESCALE"]  # Whether to rescale the data
 NULL_VAL = regular_settings["NULL_VAL"]  # Null value in the data
 # Model architecture and parameters
-MODEL_ARCH = FloodGNN
+MODEL_ARCH = GCN_Point
 dense = False
 expand = False
 if dense:
@@ -53,13 +53,17 @@ MODEL_PARAM = {
     "embed_dim": 32,
     "output_len": OUTPUT_LEN,
     "num_layer": 3,
+    "if_node": 1,
     "node_dim": 32,
+    "if_T_i_D": 0,
+    "if_D_i_W": 0,
     "temp_dim_tid": 32,
     "temp_dim_diw": 32,
     "time_of_day_size": 24,
     "day_of_week_size": 7,
     "adj_mx": adj_mx,
     "conv_type": conv_type,
+    "expand": expand
 }
 NUM_EPOCHS = 100
 
@@ -127,8 +131,6 @@ if identity:
     suffixes.append("identity")
 if dense:
     suffixes.append("dense")
-if expand:
-    suffixes.append("expand")
 
 if suffixes:
     suffix = "-".join(suffixes)
@@ -141,7 +143,7 @@ else:
         "checkpoints",
         f"{MODEL_ARCH.__name__}-{conv_type}",
     )
-CFG.TRAIN.LOSS = masked_mae
+CFG.TRAIN.LOSS = masked_mse
 # Optimizer settings
 CFG.TRAIN.OPTIM = EasyDict()
 CFG.TRAIN.OPTIM.TYPE = "Adam"
