@@ -113,9 +113,9 @@ CFG.MODEL.TARGET_FEATURES = [0]
 CFG.METRICS = EasyDict()
 # Metrics settings
 CFG.METRICS.FUNCS = EasyDict(
-    {"MAE": masked_mae, "MAPE": masked_mape, "RMSE": masked_rmse, "NSE": masked_nse}
+    {"MAE": masked_mae, "MSE": masked_mse, "RMSE": masked_rmse, "NSE": masked_nse}
 )
-CFG.METRICS.TARGET = "MAE"
+CFG.METRICS.TARGET = "MSE"
 CFG.METRICS.NULL_VAL = NULL_VAL
 
 ############################## Training Configuration ##############################
