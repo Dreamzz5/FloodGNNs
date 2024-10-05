@@ -27,6 +27,9 @@ cd FloodGNNs
 # Install dependencies
 pip install -r requirements.txt
 ```
+## Data Download
+
+To get started with the datasets, download the `all_data.zip` file from either [Google Drive](https://drive.google.com/drive/folders/1I06DatsqR5PM8nP2bqrZYaUcKqZG9Vds?usp=drive_link) After downloading, unzip the files into the `datasets/` directory:
 
 ## Usage
 
@@ -62,8 +65,6 @@ To use a dense adjacency matrix, add the `--d` parameter:
 ```bash
 python experiments/train.py -c baselines/GNNs/config.py --g 2 -ct ChebNet --d
 ```
-
-For detailed usage instructions, please refer to the documentation in the `docs/` directory.
 
 ## Contributing
 
